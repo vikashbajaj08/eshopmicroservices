@@ -1,0 +1,12 @@
+﻿docker ps -- to list out the running container
+
+docker exec -it "container Id" bash  ----is used to start a Bash shell inside a running Docker container.
+
+psql -U postgres ---command is used to interact with a PostgreSQL database from the command line "-U" is used to specify user like "postgres".
+
+\l -- to list out the database
+
+\d -- to list out the tables
+
+\c -- to change database
+
