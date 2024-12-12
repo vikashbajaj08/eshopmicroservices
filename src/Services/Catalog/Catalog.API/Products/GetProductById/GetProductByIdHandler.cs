@@ -4,18 +4,24 @@
 
     public record GetProductByIdResult(Product Product);
 
-    internal class GetProductByIdQueryHandler(IDocumentSession session,
-        ILogger<GetProductByIdQueryHandler> logger) 
+    public class GetProductByIdValidator : AbstractValidator<GetProductByIdQuery>
+    {
+        public GetProductByIdValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is required");
+        }
+    }
+
+    internal class GetProductByIdQueryHandler(IDocumentSession session) 
         : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
     {
         public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
         {
-            logger.LogInformation($"Get product by Id called {query.Id}");
 
            var product = await session.LoadAsync<Product>(query.Id,cancellationToken);
 
             if (product is null) {
-                throw new ProductNotFoundException();
+                throw new ProductNotFoundException(query.Id);
             }
             return new GetProductByIdResult(product);
         }
